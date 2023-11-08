@@ -1,29 +1,82 @@
 <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Font and Color Preferences</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .container {
+      text-align: center;
+      margin-top: 20px;
+    }
+    select, input[type="color"] {
+      margin: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Font and Color Preferences</h1>
+    <form id="preferences-form">
+      <label for="font-size">Font Size:</label>
+      <select id="font-size" name="font-size">
+        <option value="16px">Small</option>
+        <option value="20px">Medium</option>
+        <option value="24px">Large</option>
+      </select>
+      <br>
 
-<html>
-  <head>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
+      <label for="font-color">Font Color:</label>
+      <input type="color" id="font-color" name="font-color">
+      <br>
 
-  <body>
-    <!-- the entire body must be written by student -->
-    <form>
-      <label for="fontsize">Font Size:</label>
-      <input
-        type="number"
-        id="fontsize"
-        name="fontsize"
-        min="8"
-        max="72"
-        value="16"
-      />
-      <br />
-      <label for="fontcolor">Font Color:</label>
-      <input type="color" id="fontcolor" name="fontcolor" value="#000000" />
-      <br />
-      <input type="submit" value="Save" />
+      <button type="button" id="save-preferences">Save Preferences</button>
     </form>
+  </div>
 
-    <script type="text/javascript" src="./script.js"></script>
-  </body>
+  <script>
+    // Function to save user preferences as cookies
+    function savePreferences() {
+      const fontSize = document.getElementById('font-size').value;
+      const fontColor = document.getElementById('font-color').value;
+
+      // Set cookies with the selected preferences
+      document.cookie = `fontSize=${fontSize}; expires=Thu, 18 Dec 2100 12:00:00 UTC`;
+      document.cookie = `fontColor=${fontColor}; expires=Thu, 18 Dec 2100 12:00:00 UTC`;
+
+      // Apply the selected preferences
+      document.body.style.fontSize = fontSize;
+      document.body.style.color = fontColor;
+    }
+
+    // Check if user preferences are stored in cookies
+    function applySavedPreferences() {
+      const cookies = document.cookie.split(';');
+      const preferences = {};
+      for (const cookie of cookies) {
+        const [key, value] = cookie.split('=');
+        preferences[key.trim()] = value;
+      }
+
+      if (preferences.fontSize) {
+        document.body.style.fontSize = preferences.fontSize;
+        document.getElementById('font-size').value = preferences.fontSize;
+      }
+
+      if (preferences.fontColor) {
+        document.body.style.color = preferences.fontColor;
+        document.getElementById('font-color').value = preferences.fontColor;
+      }
+    }
+
+    // Apply saved preferences when the page loads
+    applySavedPreferences();
+
+    // Add event listener for the "Save Preferences" button
+    document.getElementById('save-preferences').addEventListener('click', savePreferences);
+  </script>
+</body>
 </html>
